@@ -2,6 +2,14 @@
 
 A simple Emacs interface for Spotify that makes good use of helm.
 
+* Usage
+
+=M-x helm-spotify= and type a search string.
+
+=C-n= and =C-p= will move through the track list.
+=RET= plays the track.
+=TAB= lists more options.
+
 * Status
 
 A Sunday lunchtime hack. It works for me. You're welcome to use
