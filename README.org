@@ -1,0 +1,8 @@
+* Helm Spotify
+
+A simple Emacs interface for Spotify that makes good use of helm.
+
+* Status
+
+A Sunday lunchtime hack. It works for me. You're welcome to use
+it. It's OSX only.
