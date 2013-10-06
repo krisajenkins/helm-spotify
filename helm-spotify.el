@@ -33,14 +33,16 @@
 (defun spotify-format-track (track)
   "Given a TRACK, return a (\"Formatted name\" . <href>) pair."
   (let ((track-name (cdr (assoc 'name track)))
+	(track-length (cdr (assoc 'length track)))
 	(album-name (cdr (assoc 'name (assoc 'album track))))
 	(artist-names (mapcar (lambda (artist)
 				(cdr (assoc (quote name) artist)))
 			      (cdr (assoc (quote artists) track)))))
-    (cons (format "%s\n%s\n%s"
+    (cons (format "%s (%dm%0.2ds)\n%s - %s"
+		  track-name
+		  (/ track-length 60) (mod track-length 60)
 		  (s-join "/" artist-names)
-		  album-name
-		  track-name)
+		  album-name)
 	  track)))
 
 (defun spotify-search-formatted (search-term)
