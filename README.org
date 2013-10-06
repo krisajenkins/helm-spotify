@@ -2,6 +2,8 @@
 
 A simple Emacs interface for Spotify that makes good use of helm.
 
+[[helm-spotify.png]]
+
 * Usage
 
 =M-x helm-spotify= and type a search string.
