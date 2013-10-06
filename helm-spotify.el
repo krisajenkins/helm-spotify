@@ -7,7 +7,7 @@
 ;; URL: https://github.com/krisajenkins/helm-spotify
 ;; Created: 6th October 2013
 ;; Version: 0.1.0
-;; Package-Requires: ((json "0.0.0") (s "0.0.0"))
+;; Package-Requires: ((helm "0.0.0") (json "0.0.0") (s "0.0.0"))
 
 ;;; Commentary:
 ;;
