@@ -18,7 +18,7 @@
 ;;; API Reference: https://developer.spotify.com/technologies/web-api/
 (require 'helm)
 (require 'url)
-(require 'cl)
+(require 'cl-extra)
 (require 'json)
 (require 's)
 
