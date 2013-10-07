@@ -18,7 +18,6 @@
 ;;; API Reference: https://developer.spotify.com/technologies/web-api/
 (require 'helm)
 (require 'url)
-(require 'cl-extra)
 (require 'json)
 (require 's)
 
@@ -28,13 +27,6 @@
       (alist-get (cdr symbols)
 		 (assoc (car symbols) alist))
     (cdr alist)))
-
-(defun helm-spotify-pprint (form &optional output-stream)
-  (princ (with-temp-buffer
-	   (cl-prettyprint form)
-	   (buffer-string))
-	 output-stream)
-  nil)
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
@@ -85,7 +77,7 @@
   "Return a list of helm ACTIONS available for this TRACK."
   `((,(format "Play Track - %s" (alist-get '(name) track))       . spotify-play-track)
     (,(format "Play Album - %s" (alist-get '(album name) track)) . spotify-play-album)
-    ("Show Track Metadata" . pprint)))
+    ("Show Track Metadata" . pp)))
 
 ;;;###autoload
 (defvar helm-source-spotify-track-search 
