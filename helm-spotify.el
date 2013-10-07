@@ -26,14 +26,13 @@
   (let ((a-url (format "http://ws.spotify.com/search/1/track.json?q=%s" search-term)))
     (with-current-buffer
 	(url-retrieve-synchronously a-url)
-      (re-search-forward "^$" (point-max))
-      (forward-char)
+      (goto-char (+ url-http-end-of-headers 1))
       (json-read-object))))
 
 (defun spotify-format-track (track)
-  "Given a TRACK, return a (\"Formatted name\" . <href>) pair."
+  "Given a TRACK, return a a formatted string suitable for display."
   (let ((track-name (cdr (assoc 'name track)))
-	(track-length (cdr (assoc 'length track)))
+	(track-length (cdr(assoc 'length track)))
 	(album-name (cdr (assoc 'name (assoc 'album track))))
 	(artist-names (mapcar (lambda (artist)
 				(cdr (assoc 'name artist)))
