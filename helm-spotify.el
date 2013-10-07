@@ -51,10 +51,9 @@
 	    album-name)))
 
 (defun spotify-search-formatted (search-term)
-  (let ((results (spotify-search search-term)))
-    (mapcar (lambda (track)
-	      (cons (spotify-format-track track) track))
-	    (alist-get '(tracks) results))))
+  (mapcar (lambda (track)
+	    (cons (spotify-format-track track) track))
+	  (alist-get '(tracks) (spotify-search search-term))))
 
 (defun spotify-play-href (href)
   "Get the Spotify app to play the object with the given HREF."
