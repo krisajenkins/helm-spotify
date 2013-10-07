@@ -22,6 +22,12 @@
 (require 'json)
 (require 's)
 
+(defun alist-get (symbols alist)
+  "Look up the value for the chain of SYMBOLS in ALIST."
+  (if symbols
+      (alist-get (cdr symbols)
+		 (assoc (car symbols) alist))
+    (cdr alist)))
 
 (defun helm-spotify-pprint (form &optional output-stream)
   (princ (with-temp-buffer
@@ -40,12 +46,12 @@
 
 (defun spotify-format-track (track)
   "Given a TRACK, return a a formatted string suitable for display."
-  (let ((track-name (cdr (assoc 'name track)))
-	(track-length (cdr(assoc 'length track)))
-	(album-name (cdr (assoc 'name (assoc 'album track))))
+  (let ((track-name   (alist-get '(name) track))
+	(track-length (alist-get '(length) track))
+	(album-name   (alist-get '(album name) track))
 	(artist-names (mapcar (lambda (artist)
-				(cdr (assoc 'name artist)))
-			      (cdr (assoc 'artists track)))))
+				(alist-get '(name) artist))
+			      (alist-get '(artists) track))))
     (format "%s (%dm%0.2ds)\n%s - %s"
 	    track-name
 	    (/ track-length 60) (mod track-length 60)
@@ -56,7 +62,7 @@
   (let ((results (spotify-search search-term)))
     (mapcar (lambda (track)
 	      (cons (spotify-format-track track) track))
-	    (cdr (assoc 'tracks results)))))
+	    (alist-get '(tracks) results))))
 
 (defun spotify-play-href (href)
   "Get the Spotify app to play the object with the given HREF."
@@ -66,15 +72,20 @@
 
 (defun spotify-play-track (track)
   "Get the Spotify app to play the TRACK."
-  (spotify-play-href (cdr (assoc 'href track))))
+  (spotify-play-href (alist-get '(href) track)))
 
 (defun spotify-play-album (track)
   "Get the Spotify app to play the album for this TRACK."
-  (spotify-play-href (cdr (assoc 'href (assoc 'album track)))))
+  (spotify-play-href (alist-get '(album href) track)))
 
 (defun helm-spotify-search ()
   (spotify-search-formatted helm-pattern))
 
+(defun helm-spotify-actions-for-track (actions track)
+  "Return a list of helm ACTIONS available for this TRACK."
+  `((,(format "Play Track - %s" (alist-get '(name) track))       . spotify-play-track)
+    (,(format "Play Album - %s" (alist-get '(album name) track)) . spotify-play-album)
+    ("Show Track Metadata" . pprint)))
 
 ;;;###autoload
 (defvar helm-source-spotify-track-search 
@@ -83,9 +94,7 @@
     (delayed)
     (multiline)
     (candidates-process . helm-spotify-search)
-    (action . (("Play Track" . spotify-play-track)
-	       ("Play Album" . spotify-play-album)
-	       ("Show Track Metadata" . helm-spotify-pprint)))))
+    (action-transformer . helm-spotify-actions-for-track)))
 
 ;;;###autoload
 (defun helm-spotify ()
