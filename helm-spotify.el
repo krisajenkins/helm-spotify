@@ -18,8 +18,17 @@
 ;;; API Reference: https://developer.spotify.com/technologies/web-api/
 (require 'helm)
 (require 'url)
+(require 'cl)
 (require 'json)
 (require 's)
+
+
+(defun helm-spotify-pprint (form &optional output-stream)
+  (princ (with-temp-buffer
+	   (cl-prettyprint form)
+	   (buffer-string))
+	 output-stream)
+  nil)
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
@@ -66,12 +75,6 @@
 (defun helm-spotify-search ()
   (spotify-search-formatted helm-pattern))
 
-(defun helm-spotify-pprint (form &optional output-stream)
-  (princ (with-temp-buffer
-	   (cl-prettyprint form)
-	   (buffer-string))
-	 output-stream)
-  nil)
 
 ;;;###autoload
 (defvar helm-source-spotify-track-search 
