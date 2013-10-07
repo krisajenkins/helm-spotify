@@ -67,6 +67,13 @@
 (defun helm-spotify-search ()
   (spotify-search-formatted helm-pattern))
 
+(defun helm-spotify-pprint (form &optional output-stream)
+  (princ (with-temp-buffer
+	   (cl-prettyprint form)
+	   (buffer-string))
+	 output-stream)
+  nil)
+
 ;;;###autoload
 (defvar helm-source-spotify-track-search 
   '((name . "Spotify")
@@ -76,7 +83,7 @@
     (candidates-process . helm-spotify-search)
     (action . (("Play Track" . spotify-play-track)
 	       ("Play Album" . spotify-play-album)
-	       ("Show Track Metadata" . pprint)))))
+	       ("Show Track Metadata" . helm-spotify-pprint)))))
 
 ;;;###autoload
 (defun helm-spotify ()
