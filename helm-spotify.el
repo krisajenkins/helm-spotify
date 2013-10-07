@@ -36,18 +36,18 @@
 	(track-length (cdr (assoc 'length track)))
 	(album-name (cdr (assoc 'name (assoc 'album track))))
 	(artist-names (mapcar (lambda (artist)
-				(cdr (assoc (quote name) artist)))
-			      (cdr (assoc (quote artists) track)))))
-    (cons (format "%s (%dm%0.2ds)\n%s - %s"
-		  track-name
-		  (/ track-length 60) (mod track-length 60)
-		  (s-join "/" artist-names)
-		  album-name)
-	  track)))
+				(cdr (assoc 'name artist)))
+			      (cdr (assoc 'artists track)))))
+    (format "%s (%dm%0.2ds)\n%s - %s"
+	    track-name
+	    (/ track-length 60) (mod track-length 60)
+	    (s-join "/" artist-names)
+	    album-name)))
 
 (defun spotify-search-formatted (search-term)
   (let ((results (spotify-search search-term)))
-    (mapcar #'spotify-format-track
+    (mapcar (lambda (track)
+	      (cons (spotify-format-track track) track))
 	    (cdr (assoc 'tracks results)))))
 
 (defun spotify-play-href (href)
