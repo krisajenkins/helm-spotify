@@ -7,7 +7,7 @@
 ;; URL: https://github.com/krisajenkins/helm-spotify
 ;; Created: 6th October 2013
 ;; Version: 0.1.0
-;; Package-Requires: ((helm "0.0.0") (json "0.0.0") (multi "2.0.0"))
+;; Package-Requires: ((helm "0.0.0") (multi "2.0.0"))
 
 ;;; Commentary:
 ;;
@@ -16,9 +16,9 @@
 ;;; Code:
 
 ;;; API Reference: https://developer.spotify.com/technologies/web-api/
-(require 'helm)
 (require 'url)
 (require 'json)
+(require 'helm)
 (require 'multi)
 
 (defun alist-get (symbols alist)
