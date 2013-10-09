@@ -7,7 +7,7 @@
 ;; URL: https://github.com/krisajenkins/helm-spotify
 ;; Created: 6th October 2013
 ;; Version: 0.1.0
-;; Package-Requires: ((helm "0.0.0") (json "0.0.0") (s "0.0.0"))
+;; Package-Requires: ((helm "0.0.0") (json "0.0.0"))
 
 ;;; Commentary:
 ;;
@@ -19,7 +19,6 @@
 (require 'helm)
 (require 'url)
 (require 'json)
-(require 's)
 
 (defun alist-get (symbols alist)
   "Look up the value for the chain of SYMBOLS in ALIST."
@@ -47,7 +46,7 @@
     (format "%s (%dm%0.2ds)\n%s - %s"
 	    track-name
 	    (/ track-length 60) (mod track-length 60)
-	    (s-join "/" artist-names)
+	    (mapconcat 'identity artist-names "/")
 	    album-name)))
 
 (defun spotify-search-formatted (search-term)
