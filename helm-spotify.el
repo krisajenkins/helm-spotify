@@ -7,7 +7,7 @@
 ;; URL: https://github.com/krisajenkins/helm-spotify
 ;; Created: 6th October 2013
 ;; Version: 0.1.0
-;; Package-Requires: ((helm "0.0.0") (json "0.0.0"))
+;; Package-Requires: ((helm "0.0.0") (json "0.0.0") (multi "2.0.0"))
 
 ;;; Commentary:
 ;;
@@ -19,6 +19,7 @@
 (require 'helm)
 (require 'url)
 (require 'json)
+(require 'multi)
 
 (defun alist-get (symbols alist)
   "Look up the value for the chain of SYMBOLS in ALIST."
@@ -26,6 +27,28 @@
       (alist-get (cdr symbols)
 		 (assoc (car symbols) alist))
     (cdr alist)))
+
+; "Get the Spotify app to play the object with the given HREF."
+(defmulti spotify-play-href (href) system-type)
+
+(defmulti-method spotify-play-href 'darwin
+  (href)
+  (shell-command (format "osascript -e 'tell application %S to play track %S'"
+			 "Spotify"
+			 href)))
+
+(defmulti-method-fallback spotify-play-href
+  (href)
+  (message "Sorry, helm-spotify does not support playing tracks on %S." system-type))
+
+(defun spotify-play-track (track)
+  "Get the Spotify app to play the TRACK."
+  (spotify-play-href (alist-get '(href) track)))
+
+(defun spotify-play-album (track)
+  "Get the Spotify app to play the album for this TRACK."
+  (spotify-play-href (alist-get '(album href) track)))
+
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
@@ -54,19 +77,6 @@
 	    (cons (spotify-format-track track) track))
 	  (alist-get '(tracks) (spotify-search search-term))))
 
-(defun spotify-play-href (href)
-  "Get the Spotify app to play the object with the given HREF."
-  (shell-command (format "osascript -e 'tell application %S to play track %S'"
-			 "Spotify"
-			 href)))
-
-(defun spotify-play-track (track)
-  "Get the Spotify app to play the TRACK."
-  (spotify-play-href (alist-get '(href) track)))
-
-(defun spotify-play-album (track)
-  "Get the Spotify app to play the album for this TRACK."
-  (spotify-play-href (alist-get '(album href) track)))
 
 (defun helm-spotify-search ()
   (spotify-search-formatted helm-pattern))
