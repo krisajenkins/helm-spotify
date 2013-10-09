@@ -37,6 +37,11 @@
 			 "Spotify"
 			 href)))
 
+(defmulti-method spotify-play-href 'gnu/linux
+  (href)
+  (shell-command (format "dbus-send --session --type=method_call --dest=com.spotify.qt / org.freedesktop.MediaPlayer2.OpenUri \"string:%s\"" 
+			 href)))
+
 (defmulti-method-fallback spotify-play-href
   (href)
   (message "Sorry, helm-spotify does not support playing tracks on %S." system-type))
