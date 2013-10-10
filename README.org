@@ -59,7 +59,7 @@ Let's say it returns =ms-dos=. Then you need to write this function:
   )
 #+END_SRC
 
-Then, submit a pull request!
+Then submit a pull request!
 
 ** Credits
 
