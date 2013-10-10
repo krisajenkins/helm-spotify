@@ -8,17 +8,40 @@ A simple Emacs interface for Spotify that makes good use of helm.
 
 See how [[http://www.youtube.com/watch?v=XjKtkEMUYGc&feature=youtu.be][the first version was coded in 16 minutes]].
 
+** Installation
+
+If you're hooked up to [[http://melpa.milkbox.net/][MELPA]]:
+
+#+BEGIN_EXAMPLE
+M-x package-refresh-contents
+M-x package-install RET helm-spotify
+#+END_EXAMPLE
+
+Alternatively just grab the single =helm-spotify.el= file and
+install that in your preferred way.
+
 * Usage
 
 =M-x helm-spotify= and type a search string.
 
-=C-n= and =C-p= will move through the track list.
-=RET= plays the track.
-=TAB= lists more options.
+(The search begins after you've typed at least 2 characters. You can
+use space-separated terms for psuedo-fuzzy matching.)
+
+*** Keys
+
+| =C-n=   | Next item.                       |
+| =C-p=   | Previous item.                   |
+| =RET=   | Play this track.                 |
+| =C-z=   | Play this album.                 |
+| =TAB=   | More options.                    |
+| =C-h m= | Full list of keyboard shortcuts. |
 
 * Status
 
-Ready to use. Currently OSX & Linux only.
+Ready to use.
+
+Currently OSX & Linux only. Please contribute the code for your
+platform, if you can!
 
 * Supporting Other Platforms
 
