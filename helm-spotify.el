@@ -32,8 +32,9 @@
 		 (assoc (car symbols) alist))
     (cdr alist)))
 
-; "Get the Spotify app to play the object with the given HREF."
-(defmulti spotify-play-href (href) system-type)
+(defmulti spotify-play-href (href)
+  "Get the Spotify app to play the object with the given HREF."
+  system-type)
 
 (defmulti-method spotify-play-href 'darwin
   (href)
