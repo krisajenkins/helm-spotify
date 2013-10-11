@@ -44,7 +44,7 @@
 
 (defmulti-method spotify-play-href 'gnu/linux
   (href)
-  (shell-command (format "dbus-send --session --type=method_call --dest=com.spotify.qt / org.freedesktop.MediaPlayer2.OpenUri \"string:%s\"" 
+  (shell-command (format "dbus-send --session --type=method_call --dest=com.spotify.qt / org.freedesktop.MediaPlayer2.OpenUri \"string:%s\""
 			 href)))
 
 (defmulti-method-fallback spotify-play-href
@@ -98,7 +98,7 @@
     ("Show Track Metadata" . pp)))
 
 ;;;###autoload
-(defvar helm-source-spotify-track-search 
+(defvar helm-source-spotify-track-search
   '((name . "Spotify")
     (volatile)
     (delayed)
