@@ -65,8 +65,8 @@
   (let ((a-url (format "http://ws.spotify.com/search/1/track.json?q=%s" search-term)))
     (with-current-buffer
 	(url-retrieve-synchronously a-url)
-      (goto-char (+ url-http-end-of-headers 1))
-      (json-read-object))))
+      (goto-char url-http-end-of-headers)
+      (json-read))))
 
 (defun spotify-format-track (track)
   "Given a TRACK, return a a formatted string suitable for display."
