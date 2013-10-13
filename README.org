@@ -46,17 +46,17 @@ platform, if you can!
 * Supporting Other Platforms
 
 Find out what emacs says your =system-type= is. (=C-h v system-type=).
-Let's say it returns =ms-dos=. Then you need to write this function:
+Let's say it shows the symbol =ms-dos=. Then you need to write this function:
 
 #+BEGIN_SRC emacs-lisp
-(defmulti-method spotify-play-href 'ms-dos
-  (href)
-  ...
-  ... href is a string that's something like "spotify:track:5Yt80fWRB8JG73XlPjrrKP"
-  ...
-  ... here, you write any code that will cause Spotify to play that href.
-  ...
-  )
+  (defmulti-method spotify-play-href 'ms-dos
+    (href)
+    ...
+    ... href is a string that's something like "spotify:track:5Yt80fWRB8JG73XlPjrrKP"
+    ...
+    ... here, you write any code that will cause Spotify to play that href.
+    ...
+    )
 #+END_SRC
 
 Then submit a pull request!
