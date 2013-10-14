@@ -49,7 +49,7 @@
 
 (defmulti-method spotify-play-href 'windows-nt
   (href)
-  (shell-command (format "explorer \"%s\"" href)))
+  (shell-command (format "explorer %S" href)))
 
 (defmulti-method-fallback spotify-play-href
   (href)
