@@ -40,8 +40,8 @@ use space-separated terms for psuedo-fuzzy matching.)
 
 Ready to use.
 
-Currently OSX & Linux only. Please contribute the code for your
-platform, if you can!
+Currently OSX & Linux only. Windows support is available, but
+partial. Please contribute the code for your platform, if you can!
 
 * Supporting Other Platforms
 
