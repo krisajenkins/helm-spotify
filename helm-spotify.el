@@ -5,15 +5,15 @@
 ;; Maintainer: Kris Jenkins <krisajenkins@gmail.com>
 ;; Keywords: helm spotify
 ;; URL: https://github.com/krisajenkins/helm-spotify
-;; Created: 6th October 2013
-;; Version: 0.1.0
+;; Created: 14th October 2013
+;; Version: 0.1.1
 ;; Package-Requires: ((helm "0.0.0") (multi "2.0.0"))
 
 ;;; Commentary:
 ;;
 ;; A search & play interface for Spotify.
 ;;
-;; Currently supports OSX & Linux.
+;; Currently supports OSX, Linux & Windows.
 ;;
 ;; (Want support for another platform? There's a guide in the github README.)
 
@@ -46,6 +46,10 @@
   (href)
   (shell-command (format "dbus-send --session --type=method_call --dest=com.spotify.qt / org.freedesktop.MediaPlayer2.OpenUri \"string:%s\""
 			 href)))
+
+(defmulti-method spotify-play-href 'windows-nt
+  (href)
+  (shell-command (format "explorer \"%s\"" href)))
 
 (defmulti-method-fallback spotify-play-href
   (href)
