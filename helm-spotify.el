@@ -4,6 +4,7 @@
 ;; Author: Kris Jenkins <krisajenkins@gmail.com>
 ;; Maintainer: Kris Jenkins <krisajenkins@gmail.com>
 ;; Keywords: helm spotify
+;; Package-Version: 20131014.1421
 ;; URL: https://github.com/krisajenkins/helm-spotify
 ;; Created: 14th October 2013
 ;; Version: 0.1.1
@@ -44,7 +45,8 @@
 
 (defmulti-method spotify-play-href 'gnu/linux
   (href)
-  (shell-command (format "dbus-send --session --type=method_call --dest=com.spotify.qt / org.freedesktop.MediaPlayer2.OpenUri \"string:%s\""
+  (shell-command "dbus-send  --print-reply --session --type=method_call --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause")
+  (shell-command (format "dbus-send --session --type=method_call --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.OpenUri \"string:%s\""
 			 href)))
 
 (defmulti-method spotify-play-href 'windows-nt
@@ -57,16 +59,24 @@
 
 (defun spotify-play-track (track)
   "Get the Spotify app to play the TRACK."
-  (spotify-play-href (alist-get '(href) track)))
+  (spotify-play-href (alist-get '(uri) track)))
+
+(defun spotify-get-track (album-href)
+  (let ((response (with-current-buffer
+                   (url-retrieve-synchronously album-href)
+                   (goto-char url-http-end-of-headers)
+                   (json-read))))
+    (aref (alist-get '(tracks items) response) 0)))
 
 (defun spotify-play-album (track)
   "Get the Spotify app to play the album for this TRACK."
-  (spotify-play-href (alist-get '(album href) track)))
+  (let ((first-track (spotify-get-track (alist-get '(album href) track))))
+    (spotify-play-href (alist-get '(uri) first-track))))
 
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
-  (let ((a-url (format "http://ws.spotify.com/search/1/track.json?q=%s" search-term)))
+  (let ((a-url (format "https://api.spotify.com/v1/search?q=%s&type=track" search-term)))
     (with-current-buffer
 	(url-retrieve-synchronously a-url)
       (goto-char url-http-end-of-headers)
@@ -75,7 +85,7 @@
 (defun spotify-format-track (track)
   "Given a TRACK, return a a formatted string suitable for display."
   (let ((track-name   (alist-get '(name) track))
-	(track-length (alist-get '(length) track))
+	(track-length (/ (alist-get '(duration_ms) track) 1000))
 	(album-name   (alist-get '(album name) track))
 	(artist-names (mapcar (lambda (artist)
 				(alist-get '(name) artist))
@@ -89,7 +99,7 @@
 (defun spotify-search-formatted (search-term)
   (mapcar (lambda (track)
 	    (cons (spotify-format-track track) track))
-	  (alist-get '(tracks) (spotify-search search-term))))
+	  (alist-get '(tracks items) (spotify-search search-term))))
 
 
 (defun helm-spotify-search ()
